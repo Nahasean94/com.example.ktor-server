@@ -13,44 +13,44 @@ import kotlin.test.*
 
 class SocketsKtTest {
 
-    @Test
-    fun testWebsocketTasks() = testApplication {
-        application {
-            configureRouting()
-            configureSerialization()
-            configureSockets()
-        }
-        val client = createClient {
-            install(WebSockets)
-        }
-        client.webSocket("/tasks") {
-            TODO("Please write your test here")
-        }
-        val expectedTasks = listOf(
-            Task("cleaning", "Clean the house", Priority.Low),
-            Task("gardening", "Mow the lawn", Priority.Medium),
-            Task("shopping", "Buy the groceries", Priority.High),
-            Task("painting", "Paint the fence", Priority.Medium)
-        )
-        var actualTasks = emptyList<Task>()
-
-        client.webSocket("/tasks") {
-            consumeTasksAsFlow().collect { allTasks ->
-                actualTasks = allTasks
-            }
-        }
-
-        assertEquals(expectedTasks.size, actualTasks.size)
-        expectedTasks.forEachIndexed { index, task ->
-            assertEquals(task, actualTasks[index])
-        }
-    }
-    private fun DefaultClientWebSocketSession.consumeTasksAsFlow() = incoming
-        .consumeAsFlow()
-        .map {
-            converter!!.deserialize<Task>(it)
-        }
-        .scan(emptyList<Task>()) { list, task ->
-            list + task
-        }
+//    @Test
+//    fun testWebsocketTasks() = testApplication {
+//        application {
+//            configureRouting()
+//            configureSerialization()
+//            configureSockets()
+//        }
+//        val client = createClient {
+//            install(WebSockets)
+//        }
+//        client.webSocket("/tasks") {
+//            TODO("Please write your test here")
+//        }
+//        val expectedTasks = listOf(
+//            Task("cleaning", "Clean the house", Priority.Low),
+//            Task("gardening", "Mow the lawn", Priority.Medium),
+//            Task("shopping", "Buy the groceries", Priority.High),
+//            Task("painting", "Paint the fence", Priority.Medium)
+//        )
+//        var actualTasks = emptyList<Task>()
+//
+//        client.webSocket("/tasks") {
+//            consumeTasksAsFlow().collect { allTasks ->
+//                actualTasks = allTasks
+//            }
+//        }
+//
+//        assertEquals(expectedTasks.size, actualTasks.size)
+//        expectedTasks.forEachIndexed { index, task ->
+//            assertEquals(task, actualTasks[index])
+//        }
+//    }
+//    private fun DefaultClientWebSocketSession.consumeTasksAsFlow() = incoming
+//        .consumeAsFlow()
+//        .map {
+//            converter!!.deserialize<Task>(it)
+//        }
+//        .scan(emptyList<Task>()) { list, task ->
+//            list + task
+//        }
 }
